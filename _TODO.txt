@@ -1,5 +1,6 @@
 [ ] Read file as UTF-8
 [ ] Ensure it's a text file (not binary), and that it is in UTF-8. Deal with BOM?
+[ ] Stream the file
 [ ] Need to have several examples to present
 [ ] The Big-O complexity of the algorithm should be better than O(N^2), where N is the number of words.
 [ ] Commit to github

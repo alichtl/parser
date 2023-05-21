@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2023 Adam Lichtl.
+//
+
 #include <gtest/gtest.h>
 
 // Demonstrate some basic assertions.

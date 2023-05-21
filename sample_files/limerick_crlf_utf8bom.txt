@@ -1,0 +1,4 @@
+﻿En limerick skal være på fem linjer, hvor første,
+andre og femte linje har samme enderim og består
+av tre verseføtter. Tredje og fjerde er kortere
+med to verseføtter, og de deler enderim.

@@ -1,3 +1,7 @@
+#
+# Copyright (c) 2023 Adam Lichtl.
+#
+
 cmake_minimum_required(VERSION 3.14)
 project(parser)
 enable_testing()
@@ -5,8 +9,8 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(parser parser.cc)
-add_executable(parser_test parser_test.cc)
+add_executable(parser run.cc parser.cc)
+add_executable(parser_test run_test.cc parser.cc)
 target_link_libraries(parser_test GTest::gtest_main)
 
 include(FetchContent)
