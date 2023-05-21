@@ -5,9 +5,9 @@ A console application to index the words within a text file.
 **Table of Contents**
 
 - [Description](#description)
-- [File encoding support](#file-encoding-support)
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
+- [APPENDIX: File encoding check](#appendix-file-encoding-check)
 
 ## Description
 
@@ -30,21 +30,6 @@ aaa 4 12
 bbb 8
 zzz 0
 ```
-
-## File encoding support
-
-This program can read files using of the any four file encodings:
-
-1. UTF-8, assumed if no byte-order mark (BOM) is found
-2. UTF-8, with a BOM of 0xEFBBBF
-3. Big-endian UTF-16, if the BOM is 0xFEFF
-4. Little-endian UTF-16, if the BOM is 0xFFFE
-
-The raw binary contents of a file can be viewed with `hexdump -C <file>`.
-
-This program does not support UTF-32 encoding.
-
-See also <https://unicode.org/faq/utf_bom.html>.
 
 ## Prerequisites
 
@@ -77,4 +62,21 @@ Run unit tests (uses the GoogleTest framework):
 - `make parser_test`
 - `./parser_test`
 
-<sub>Copyright &copy; 2023 Adam Lichtl></sub>
+## APPENDIX: File encoding check
+
+This program only accepts files in the UTF-8 format, either with or without a byte-order mark (BOM).
+It detects potential encoding issues by examining the first few bytes of the file.
+
+For manual verification, the raw binary contents of a file can be viewed with `hexdump -C <file>`.
+
+See also <https://unicode.org/faq/utf_bom.html>.
+
+| **BOM**     | **Encoding**          |
+| ----------- | --------------------- |
+| 00 00 FE FF | UTF-32, big-endian    |
+| FF FE 00 00 | UTF-32, little-endian |
+| FE FF       | UTF-16, big-endian    |
+| FF FE       | UTF-16, little-endian |
+| EF BB BF    | UTF-8                 |
+
+<sub>Copyright &copy; 2023 Adam Lichtl</sub>

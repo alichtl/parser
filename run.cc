@@ -2,31 +2,27 @@
 // Copyright (c) 2023 Adam Lichtl.
 //
 
+#include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 #include "parser.h"
 
-// From: https://unicode.org/faq/utf_bom.html#bom4
-//
-// | Bytes       | Encoding Form         |
-// | ----------- | --------------------- |
-// | 00 00 FE FF | UTF-32, big-endian    |
-// | FF FE 00 00 | UTF-32, little-endian |
-// | FE FF       | UTF-16, big-endian    |
-// | FF FE       | UTF-16, little-endian |
-// | EF BB BF    | UTF-8                 |
-
 int main(int argc, char* argv[]) {
   // const string filepath{"../sample_files/limerick_crlf_utf8_bom.txt"};
-  const string filepath{"../sample_files/limerick_crlf_utf8_bom.txt"};
+  // const string filepath{"../sample_files/limerick_crlf_utf8_bom.txt"};
+  const string filepath{"../sample_files/orig.txt"};
 
   const size_t kBufferSize = 2048;
   char buffer[kBufferSize];
+  size_t buffer_offset = 0;  // offset of buffer within the file
+  size_t idx = 0;            // index within the buffer
 
   // Verify file is UTF-8 encoded and remove the BOM if present
   ifstream file(filepath);
@@ -36,40 +32,51 @@ int main(int argc, char* argv[]) {
   file.read(buffer, kBufferSize);
   auto n_chars_read = file.gcount();
 
-  if (n_chars_read == 0) {
-    cout << "File is empty" << endl;
-    return EXIT_SUCCESS;
-  }
-
-  if (buffer[0] == char(0x00)) {
+  if (n_chars_read >= 1 && buffer[0] == char(0x00)) {  // Detects UTF-32BE
     throw runtime_error("Unable to parse " + filepath +
                         ": File starts with NULL character. Invalid encoding? "
                         "Only ASCII and UTF-8 are supported.");
   }
 
-  if (buffer[0] == char(0xFF) || buffer[0] == char(0xFE)) {
-    throw runtime_error(
-        "Unable to parse " + filepath +
-        ": Invalid encoding. Only ASCII and UTF-8 is supported.");
+  if (n_chars_read >= 1 && buffer[0] == char(0xFF) ||
+      buffer[0] == char(0xFE)) {  // Detects UTF-32LE, UTF-16BE, and UTF-16LE
+    throw runtime_error("Unable to parse " + filepath + ": Invalid encoding. Only ASCII and UTF-8 is supported.");
   }
 
-  auto start = &buffer[0];
-  auto length = n_chars_read;
-  if (n_chars_read >= 3 && buffer[0] == char(0xEF) && buffer[1] == char(0xBB) &&
-      buffer[2] == char(0xBF)) {
-    // Remove UTF-8 BOM
-    cout << "WARNING: Detected a UTF-8 BOM. Skipping these three bytes and "
-            "excluding them from the indexing calculations."
-         << endl;
-    start += 3;
-    length -= 3;
+  if (n_chars_read >= 3 && buffer[0] == char(0xEF) && buffer[1] == char(0xBB) && buffer[2] == char(0xBF)) {
+    idx += 3;  // Skip the UTF-8 BOM if found.
   }
 
-  string s(start, length);
+  map<string, vector<size_t>> dict{};
+  vector<char> word{};
+  size_t word_offset = 0;
+  while (n_chars_read > 0) {
+    for (; idx < n_chars_read; ++idx) {
+      if (isspace(buffer[idx])) {
+        if (word.size() > 0) {
+          dict[string(word.begin(), word.end())].push_back(word_offset);
+          word.clear();
+        }
+      } else {
+        if (word.size() == 0) {
+          word_offset = buffer_offset + idx;
+        }
+        word.push_back(buffer[idx]);
+      }
+    }
+    buffer_offset += n_chars_read;
+    idx = 0;
+    file.read(buffer, kBufferSize);
+    n_chars_read = file.gcount();
+  }
 
-  cout << s << endl;
-
-  file.close();
+  for (const auto& entry : dict) {
+    cout << entry.first;
+    for (auto word_index : entry.second) {
+      cout << " " << word_index;
+    }
+    cout << endl;
+  }
 
   return EXIT_SUCCESS;
 }
