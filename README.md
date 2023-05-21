@@ -36,9 +36,11 @@ zzz 0
 This program can read files using of the any four file encodings:
 
 1. UTF-8, assumed if no byte-order mark (BOM) is found
-2. UTF-8 with a BOM
+2. UTF-8, with a BOM of 0xEFBBBF
 3. Big-endian UTF-16, if the BOM is 0xFEFF
 4. Little-endian UTF-16, if the BOM is 0xFFFE
+
+The raw binary contents of a file can be viewed with `hexdump -C <file>`.
 
 This program does not support UTF-32 encoding.
 
