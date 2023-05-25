@@ -3,5 +3,8 @@
   "C_Cpp.default.cppStandard": "c++17",
   "C_Cpp.default.includePath": ["${workspaceFolder}/**"],
   "cmake.configureOnOpen": true,
+  "cmake.debugConfig": {
+    "args": ["../sample_files/orig.txt"]
+  },
   "editor.formatOnSave": true
 }

@@ -9,8 +9,8 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(parser run.cc parser.cc)
-add_executable(parser_test run_test.cc parser.cc)
+add_executable(parser run.cc Parser.cc)
+add_executable(parser_test run_test.cc Parser.cc)
 target_link_libraries(parser_test GTest::gtest_main)
 
 include(FetchContent)
