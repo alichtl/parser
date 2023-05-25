@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <stdexcept>
 
 #include "Parser.h"
 
@@ -23,7 +24,7 @@ TEST(Parser, OriginalTestCase) {
 }
 
 TEST(Parser, OriginalTestCaseWithoutTrailingWhitespace) {
-  auto index = Parser().parse("zzz aaa bbb aaa");
+  const auto index = Parser().parse("zzz aaa bbb aaa");
   EXPECT_THAT(index,
               ElementsAre(Pair("aaa", ElementsAre(4, 12)), Pair("bbb", ElementsAre(8)), Pair("zzz", ElementsAre(0))));
 }
@@ -32,14 +33,14 @@ TEST(Parser, OriginalTestCaseFromFile) {
   ifstream file("../sample_files/orig.txt");
   ASSERT_TRUE(file);
 
-  auto index = Parser().parse(file);
+  const auto index = Parser().parse(file);
   EXPECT_THAT(index,
               ElementsAre(Pair("aaa", ElementsAre(4, 12)), Pair("bbb", ElementsAre(8)), Pair("zzz", ElementsAre(0))));
 }
 
 TEST(Parser, SmallBuffer) {
   const size_t buffer_size_bytes{2};
-  auto index = Parser(buffer_size_bytes).parse("zzz aaa bbb aaa\n");
+  const auto index = Parser(buffer_size_bytes).parse("zzz aaa bbb aaa\n");
   EXPECT_THAT(index,
               ElementsAre(Pair("aaa", ElementsAre(4, 12)), Pair("bbb", ElementsAre(8)), Pair("zzz", ElementsAre(0))));
 }
@@ -48,7 +49,7 @@ TEST(Parser, UTF8File) {
   ifstream file("../sample_files/limerick_lf_utf8.txt");
   ASSERT_TRUE(file);
 
-  auto index = Parser().parse(file);
+  const auto index = Parser().parse(file);
   ASSERT_EQ(index.size(), 30);
 
   auto it = index.find("består");
@@ -60,7 +61,7 @@ TEST(Parser, UTF8FileCRLF) {
   ifstream file("../sample_files/limerick_crlf_utf8.txt");
   ASSERT_TRUE(file);
 
-  auto index = Parser().parse(file);
+  const auto index = Parser().parse(file);
   ASSERT_EQ(index.size(), 30);
 
   auto it = index.find("består");
@@ -72,7 +73,7 @@ TEST(Parser, UTF8FileCRLFBOM) {
   ifstream file("../sample_files/limerick_crlf_utf8_bom.txt");
   ASSERT_TRUE(file);
 
-  auto index = Parser().parse(file);
+  const auto index = Parser().parse(file);
   ASSERT_EQ(index.size(), 30);
 
   auto it = index.find("består");

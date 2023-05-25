@@ -5,6 +5,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -30,16 +31,16 @@ int main(int argc, char* argv[]) {
       throw runtime_error("Unable to open " + filepath + ": " + strerror(errno));
     }
 
-    auto index = Parser().parse(file);
+    const auto index = Parser().parse(file);
 
     for (const auto& entry : index) {
       cout << entry.first;
-      for (auto word_index : entry.second) {
+      for (const auto word_index : entry.second) {
         cout << " " << word_index;
       }
       cout << endl;
     }
-  } catch (runtime_error e) {
+  } catch (const runtime_error& e) {
     cout << "ERROR: Unable to parse " << filepath << ": " << e.what() << endl;
     return EXIT_FAILURE;
   }
