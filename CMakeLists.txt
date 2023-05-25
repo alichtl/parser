@@ -11,7 +11,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(parser run.cc Parser.cc)
 add_executable(parser_test run_test.cc Parser.cc)
-target_link_libraries(parser_test GTest::gtest_main)
+
+target_link_libraries(parser_test GTest::gtest_main GTest::gmock_main)
 
 include(FetchContent)
 FetchContent_Declare(

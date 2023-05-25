@@ -4,25 +4,29 @@
 
 #include "Parser.h"
 
-#include <algorithm>
 #include <istream>
 #include <map>
+#include <sstream>
 #include <string>
 #include <vector>
 
+namespace parser {
+
 using std::istream;
+using std::istringstream;
 using std::map;
 using std::runtime_error;
 using std::size_t;
 using std::string;
+using std::string_view;
 using std::vector;
 
-const size_t kBufferSize = 2048;
+const size_t kBufferSize{2048};
 
-std::map<std::string, std::vector<std::size_t>> Parser::parse(std::istream& is) {
+map<string, vector<size_t>> Parser::parse(istream& is) {
   char buffer[kBufferSize];
-  size_t buffer_offset = 0;  // offset of buffer within the file
-  size_t idx = 0;            // index within the buffer
+  size_t buffer_offset{0};  // offset of buffer within the file
+  size_t idx{0};            // index within the buffer
 
   is.read(buffer, kBufferSize);
   auto n_chars_read = is.gcount();
@@ -44,7 +48,7 @@ std::map<std::string, std::vector<std::size_t>> Parser::parse(std::istream& is) 
 
   map<string, vector<size_t>> index{};
   vector<char> word{};
-  size_t word_offset = 0;
+  size_t word_offset{0};
   while (n_chars_read > 0) {
     for (; idx < n_chars_read; ++idx) {
       if (isspace(buffer[idx])) {
@@ -67,3 +71,10 @@ std::map<std::string, std::vector<std::size_t>> Parser::parse(std::istream& is) 
 
   return index;
 }
+
+map<string, vector<size_t>> Parser::parse(string_view sv) {
+  auto is = istringstream{string{sv}};
+  return parse(is);
+}
+
+}  // namespace parser

@@ -10,6 +10,7 @@
 
 #include "Parser.h"
 
+using parser::Parser;
 using std::cout;
 using std::endl;
 using std::ifstream;
