@@ -22,6 +22,12 @@ TEST(Parser, OriginalTestCase) {
               ElementsAre(Pair("aaa", ElementsAre(4, 12)), Pair("bbb", ElementsAre(8)), Pair("zzz", ElementsAre(0))));
 }
 
+TEST(Parser, OriginalTestCaseWithoutTrailingWhitespace) {
+  auto index = Parser().parse("zzz aaa bbb aaa");
+  EXPECT_THAT(index,
+              ElementsAre(Pair("aaa", ElementsAre(4, 12)), Pair("bbb", ElementsAre(8)), Pair("zzz", ElementsAre(0))));
+}
+
 TEST(Parser, OriginalTestCaseFromFile) {
   ifstream file("../sample_files/orig.txt");
   ASSERT_TRUE(file);
@@ -93,8 +99,6 @@ TEST(Parser, SingleCharFile) {
   ASSERT_TRUE(file);
 
   auto index = Parser().parse(file);
-  ASSERT_EQ(index.size(), 0);
-
   EXPECT_THAT(index, ElementsAre(Pair("a", ElementsAre(0))));
 }
 

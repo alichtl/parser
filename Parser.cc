@@ -66,6 +66,9 @@ map<string, vector<size_t>> Parser::parse(istream& is) const {
     is.read(buffer, buffer_size_bytes_);
     n_chars_read = is.gcount();
   }
+  if (word.size() > 0) {
+    index[string(word.begin(), word.end())].push_back(word_offset);
+  }
 
   return index;
 }
