@@ -50,12 +50,15 @@ Generate build files. If on Linux/Mac, this will generate a Makefile.
 
 - `mkdir build`
 - `cd build`
+  - The directions below assume you're running commands from within this new `build` directory.
 - `cmake ..`
 
-Build and run the parser (still within the `build` directory):
+Build and run the parser:
 
 - `make parser`
 - `./parser <file.txt>`
+  - To reproduce the example above, run: `./parser ../sample_files/orig.txt`
+  - Other files are available in the `sample_files` directory, some of which are used by the unit tests in `run_test.cc`.
 
 Run unit tests (uses the GoogleTest framework):
 
