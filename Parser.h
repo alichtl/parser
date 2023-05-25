@@ -15,8 +15,12 @@ namespace parser {
 
 class Parser {
  public:
-  std::map<std::string, std::vector<std::size_t>> parse(std::istream& is);
-  std::map<std::string, std::vector<std::size_t>> parse(std::string_view sv);
+  Parser(size_t buffer_size_bytes = 2048) : buffer_size_bytes_{buffer_size_bytes} {}
+  std::map<std::string, std::vector<std::size_t>> parse(std::istream& is) const;
+  std::map<std::string, std::vector<std::size_t>> parse(std::string_view sv) const;
+
+ private:
+  const size_t buffer_size_bytes_;
 };
 
 }  // namespace parser

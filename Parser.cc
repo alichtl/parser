@@ -12,23 +12,21 @@
 
 namespace parser {
 
-using std::istream;
-using std::istringstream;
-using std::map;
-using std::runtime_error;
-using std::size_t;
-using std::string;
-using std::string_view;
-using std::vector;
+using ::std::istream;
+using ::std::istringstream;
+using ::std::map;
+using ::std::runtime_error;
+using ::std::size_t;
+using ::std::string;
+using ::std::string_view;
+using ::std::vector;
 
-const size_t kBufferSize{2048};
-
-map<string, vector<size_t>> Parser::parse(istream& is) {
-  char buffer[kBufferSize];
+map<string, vector<size_t>> Parser::parse(istream& is) const {
+  char buffer[buffer_size_bytes_];
   size_t buffer_offset{0};  // offset of buffer within the file
   size_t idx{0};            // index within the buffer
 
-  is.read(buffer, kBufferSize);
+  is.read(buffer, buffer_size_bytes_);
   auto n_chars_read = is.gcount();
 
   if (n_chars_read >= 1 && buffer[0] == char(0x00)) {  // Detects UTF-32BE
@@ -65,15 +63,15 @@ map<string, vector<size_t>> Parser::parse(istream& is) {
     }
     buffer_offset += n_chars_read;
     idx = 0;
-    is.read(buffer, kBufferSize);
+    is.read(buffer, buffer_size_bytes_);
     n_chars_read = is.gcount();
   }
 
   return index;
 }
 
-map<string, vector<size_t>> Parser::parse(string_view sv) {
-  auto is = istringstream{string{sv}};
+map<string, vector<size_t>> Parser::parse(string_view sv) const {
+  istringstream is{string{sv}};
   return parse(is);
 }
 
