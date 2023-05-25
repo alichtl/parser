@@ -45,7 +45,7 @@ TEST(Parser, SmallBuffer) {
               ElementsAre(Pair("aaa", ElementsAre(4, 12)), Pair("bbb", ElementsAre(8)), Pair("zzz", ElementsAre(0))));
 }
 
-TEST(Parser, UTF8File) {
+TEST(Parser, UTF8FileWithUnicode) {
   ifstream file("../sample_files/limerick_lf_utf8.txt");
   ASSERT_TRUE(file);
 
