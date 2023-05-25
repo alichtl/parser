@@ -13,7 +13,7 @@ A console application to index the words within a text file.
 
 This application parses a UTF-8 text file into “words”, where each “word” is defined as any consecutive sequence of non-whitespace characters. Whitespace is defined as characters checked by the `isspace()` standard function (i.e. ‘` `‘, ‘`\t`’, ‘`\n`’, ‘`\v`’, ‘`\f`’, ‘`\r`’).
 
-The program prints all unique words in lexicographical order, each on its own line. After each word, separated by spaces, the program prints the character index (0-based) of the start of each instance of that word within the original file.
+The program prints all unique words in lexicographical order, each on its own line. After each word, separated by spaces, the program prints the character index (0-based, in bytes) of the start of each instance of that word within the original file.
 
 Example:
 
@@ -58,7 +58,7 @@ Build and run the parser:
 - `make parser`
 - `./parser <file.txt>`
   - To reproduce the example above, run: `./parser ../sample_files/orig.txt`
-  - Other files are available in the `sample_files` directory, some of which are used by the unit tests in `run_test.cc`.
+  - Other files are available in the `sample_files` directory, some of which are used by the unit tests in `Parser_test.cc`.
 
 Run unit tests (uses the GoogleTest framework):
 
