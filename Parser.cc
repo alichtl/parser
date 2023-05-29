@@ -34,8 +34,8 @@ map<string, vector<size_t>> Parser::parse(istream& is) const {
         "Only ASCII and UTF-8 are supported.");
   }
 
-  if (n_chars_read >= 1 && buffer[0] == char(0xFF) ||
-      buffer[0] == char(0xFE)) {  // Detects UTF-32LE, UTF-16BE, and UTF-16LE
+  if (n_chars_read >= 1 &&
+      (buffer[0] == char(0xFF) || buffer[0] == char(0xFE))) {  // Detects UTF-32LE, UTF-16BE, and UTF-16LE
     throw runtime_error("Invalid encoding. Only ASCII and UTF-8 are supported.");
   }
 
